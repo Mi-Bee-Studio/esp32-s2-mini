@@ -93,11 +93,12 @@ void app_main(void)
         if (aerr == ESP_OK && now - last_aht >= 5000) {
             float t, rh;
             last_aht = now;
-            if (aht20_read(&t, &rh) == ESP_OK) {
+            const esp_err_t rerr = aht20_read(&t, &rh);
+            if (rerr == ESP_OK) {
                 env_update(t, rh);
             } else if (now - last_aht_err >= 30000) { /* 失败告警限频 30s */
                 last_aht_err = now;
-                ESP_LOGW(TAG, "AHT20 读取失败（接线/供电检查），30s 后再告警");
+                ESP_LOGW(TAG, "AHT20 读取失败（%s），30s 后再告警", esp_err_to_name(rerr));
             }
         }
         if (now - last_hb >= 10000) {

@@ -42,7 +42,9 @@ esp_err_t aht20_start(int sda_io, int scl_io)
     const i2c_device_config_t dev_cfg = {
         .dev_addr_length = I2C_ADDR_BIT_LEN_7,
         .device_address = AHT20_ADDR,
-        .scl_speed_hz = 100 * 1000,
+        /* 50kHz：GPIO 内部上拉(~45kΩ)偏弱，100kHz 下杜邦线 CRC 出错（真机教训），
+         * 降速换可靠性；AHT20 温湿度 5s 一采对速率无感 */
+        .scl_speed_hz = 50 * 1000,
     };
     err = i2c_master_bus_add_device(s_bus, &dev_cfg, &s_dev);
     if (err != ESP_OK) {
@@ -101,7 +103,7 @@ esp_err_t aht20_read(float *temp_c, float *rh)
     if (err != ESP_OK) {
         return err;
     }
-    vTaskDelay(pdMS_TO_TICKS(80)); /* 测量完成 ≤80ms */
+    vTaskDelay(pdMS_TO_TICKS(100)); /* 测量完成 ≤80ms，留余量 */
 
     uint8_t d[7] = { 0 };
     err = i2c_master_receive(s_dev, d, sizeof(d), AHT20_TIMEOUT_MS);
