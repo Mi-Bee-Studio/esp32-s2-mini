@@ -30,6 +30,7 @@ Key points of the convention:
 | Project | Watchdog | Web/API OTA |
 |---------|----------|-------------|
 | blink | ✅ per-task TWDT (5 s panic) | ✅ dual OTA slots + streaming `POST /ota` |
+| env-station | ✅ TWDT 5 s panic (main 500 ms + CSI task) | ✅ dual OTA slots + streaming `POST /ota` |
 
 ---
 
@@ -110,3 +111,4 @@ Key points (per the official pinout image + schematic):
 | Project | Description |
 |---------|-------------|
 | [blink](blink/README.md) | Baseline/test firmware: LED (GPIO15) blink + BOOT interaction + heartbeat logging + web maintenance page (provisioning/OTA) + TWDT watchdog |
+| [env-station](env-station/README.md) | Environment sensing node (2026-10-03, wired): AHT20 temp/RH (I2C SDA=33/SCL=35) + SR501 PIR (GPIO6) + WiFi CSI `#S1` stream (20 Hz, gateway-ping stimulus) + web maintenance page (provisioning/OTA) + TWDT |

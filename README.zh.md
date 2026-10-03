@@ -30,6 +30,7 @@ esp32-s2-mini/
 | 项目 | 看门狗 | Web/API OTA |
 |------|--------|-------------|
 | blink | ✅ 任务级 TWDT（5s panic） | ✅ 双 OTA 槽 + 流式 `POST /ota` |
+| env-station | ✅ TWDT 5s panic（主循环 500ms + CSI 任务） | ✅ 双 OTA 槽 + 流式 `POST /ota` |
 
 ---
 
@@ -122,3 +123,4 @@ esp32-s2-mini/
 | 项目 | 说明 |
 |------|------|
 | [blink](blink/README.zh.md) | 基线工程（测试固件）：LED（GPIO15）闪烁 + BOOT 交互 + 心跳日志 + Web 维护页（配网/OTA）+ TWDT 看门狗 |
+| [env-station](env-station/README.zh.md) | 环境感知节点（2026-10-03 已接线）：AHT20 温湿度（I2C SDA=33/SCL=35）+ SR501 PIR（GPIO6）+ WiFi CSI `#S1` 流（20Hz + 网关 ping 激励）+ Web 维护页（配网/OTA）+ TWDT |
