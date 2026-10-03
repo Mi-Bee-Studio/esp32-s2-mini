@@ -25,8 +25,8 @@ static const char *TAG = "csi";
 #define CSI_QUEUE_LEN   64
 #define CSI_TASK_STACK  4096
 #define CSI_TASK_PRIO   3
-#define CSI_MAX_HZ      20   /* #S1 限频 */
-#define CSI_STIMULUS_HZ 1    /* ping 网关激励频率 */
+#define CSI_MAX_HZ      50   /* #S1 限频（对齐 homepulse sense_start 默认） */
+#define CSI_STIMULUS_HZ 20   /* ping 网关激励（对齐 homepulse 默认 20Hz） */
 
 typedef struct {
     int64_t t_ms;
