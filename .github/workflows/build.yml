@@ -63,7 +63,8 @@ jobs:
           path: firmware/
 
       # blink ships the OTA dual-slot layout: app offset 0x20000
-      # ESP32-S2 bootloader offset is 0x0
+      # ESP32-S2 bootloader offset is 0x1000 (inherited from classic ESP32,
+      # unlike S3/C3 at 0x0 — verified against idf.py's own flash_args)
       - name: Create Flash Scripts
         run: |
           cat > flash_blink.sh << 'SCRIPT'
@@ -74,7 +75,7 @@ jobs:
           PORT=${1:-/dev/ttyACM0}
           echo "Flashing blink firmware to $PORT..."
           esptool.py --chip esp32s2 -p "$PORT" -b 460800 --before no_reset --after hard_reset write_flash \
-            0x0 firmware/blink_bootloader.bin \
+            0x1000 firmware/blink_bootloader.bin \
             0x8000 firmware/blink_partition_table.bin \
             0x20000 firmware/blink_firmware.bin
           echo "Done! Reset the device to start."
@@ -87,7 +88,7 @@ jobs:
           set PORT=%1
           if "%PORT%"=="" set PORT=COM3
           echo Flashing blink firmware to %PORT%...
-          esptool.py --chip esp32s2 -p %PORT% -b 460800 --before no_reset --after hard_reset write_flash 0x0 firmware\blink_bootloader.bin 0x8000 firmware\blink_partition_table.bin 0x20000 firmware\blink_firmware.bin
+          esptool.py --chip esp32s2 -p %PORT% -b 460800 --before no_reset --after hard_reset write_flash 0x1000 firmware\blink_bootloader.bin 0x8000 firmware\blink_partition_table.bin 0x20000 firmware\blink_firmware.bin
           echo Done! Reset the device to start.
           SCRIPT
 
@@ -112,5 +113,5 @@ jobs:
             gh release create ${{ github.ref_name }} \
               $ASSETS \
               --title "ESP32-S2-Mini Firmware ${{ github.ref_name }}" \
-              --notes-file <(echo "OTA dual-slot: app @ 0x20000, bootloader @ 0x0 (ESP32-S2). First flash needs bootloader + partition table + app (the scripts do all three). Enter download mode before flashing: hold BOOT, tap RESET, release BOOT.")
+              --notes-file <(echo "OTA dual-slot: app @ 0x20000, bootloader @ 0x1000, partition table @ 0x8000 (ESP32-S2). First flash needs bootloader + partition table + app (the scripts do all three). Enter download mode before flashing: hold BOOT, tap RESET, release BOOT.")
           fi
